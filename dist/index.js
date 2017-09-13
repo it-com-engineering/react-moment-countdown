@@ -84,11 +84,15 @@ var ReactMomentCountDown = function (_Component) {
   }, {
     key: 'render',
     value: function render() {
-      var classPrefix = this.props.classPrefix;
+      var _props = this.props,
+          classPrefix = _props.classPrefix,
+          delimiter = _props.delimiter;
       var countdown = this.state.countdown;
 
 
-      var times = this.timeKeys.map(function (key) {
+      var keysLength = this.timeKeys.length;
+
+      var times = this.timeKeys.map(function (key, index) {
         return _react2.default.createElement(
           'span',
           { key: key, className: classPrefix + 'countdown-block' },
@@ -97,17 +101,23 @@ var ReactMomentCountDown = function (_Component) {
             { className: classPrefix + 'countdown-value' },
             countdown[key]
           ),
+          ' ',
           _react2.default.createElement(
             'span',
             { className: classPrefix + 'countdown-label' },
             key
+          ),
+          index < keysLength - 1 && _react2.default.createElement(
+            'span',
+            { className: classPrefix + 'countdown-delimiter' },
+            delimiter
           )
         );
       });
 
       return _react2.default.createElement(
         'span',
-        { className: this.props.classPrefix + 'countdown' },
+        { className: classPrefix + 'countdown' },
         times
       );
     }
@@ -118,6 +128,7 @@ var ReactMomentCountDown = function (_Component) {
 
 ReactMomentCountDown.propTypes = {
   toDate: _react2.default.PropTypes.oneOfType([_react2.default.PropTypes.instanceOf(Date), _reactMomentProptypes2.default.momentObj]).isRequired,
+  delimiter: _react2.default.PropTypes.string,
   excludeTimeKeys: _react2.default.PropTypes.array,
   onTick: _react2.default.PropTypes.func,
   onCountdownEnd: _react2.default.PropTypes.func,
@@ -128,7 +139,8 @@ ReactMomentCountDown.defaultProps = {
   excludeTimeKeys: ['weeks', 'ms'],
   onTick: function onTick() {},
   onCountdownEnd: function onCountdownEnd() {},
-  classPrefix: ''
+  classPrefix: '',
+  delimiter: ', '
 };
 
 exports.default = ReactMomentCountDown;

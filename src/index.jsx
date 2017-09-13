@@ -48,25 +48,31 @@ class ReactMomentCountDown extends Component {
 
   render() {
     const {
-      classPrefix
+      classPrefix,
+      delimiter
     } = this.props;
     const {
       countdown
     } = this.state;
 
-    const times = this.timeKeys.map(key => (
+    const keysLength = this.timeKeys.length;
+
+    const times = this.timeKeys.map((key, index) => (
       <span key={key} className={`${classPrefix}countdown-block`}>
         <span className={`${classPrefix}countdown-value`}>
           {countdown[key]}
-        </span>
+        </span>{' '}
         <span className={`${classPrefix}countdown-label`}>
           {key}
         </span>
+        {index < keysLength - 1 && (
+          <span className={`${classPrefix}countdown-delimiter`}>{ delimiter }</span>
+        )}
       </span>
     ));
 
     return(
-      <span className={`${this.props.classPrefix}countdown`}>{ times }</span>
+      <span className={`${classPrefix}countdown`}>{ times }</span>
     );
   }
 }
@@ -76,6 +82,7 @@ ReactMomentCountDown.propTypes = {
     React.PropTypes.instanceOf(Date),
     momentPropTypes.momentObj
   ]).isRequired,
+  delimiter: React.PropTypes.string,
   excludeTimeKeys: React.PropTypes.array,
   onTick: React.PropTypes.func,
   onCountdownEnd: React.PropTypes.func,
@@ -86,7 +93,8 @@ ReactMomentCountDown.defaultProps = {
   excludeTimeKeys: ['weeks', 'ms'],
   onTick: () => {},
   onCountdownEnd: () => {},
-  classPrefix: ''
+  classPrefix: '',
+  delimiter: ', '
 };
 
 export default ReactMomentCountDown;
