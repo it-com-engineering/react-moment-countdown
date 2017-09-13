@@ -1,64 +1,92 @@
 import React, { Component } from 'react';
-
-import formatDate from './format-date';
+import moment from 'moment';
+import momentPropTypes from 'react-moment-proptypes';
+import { getDiffer, getTimeKeysWithout } from './calculate-date-diff';
 
 class ReactMomentCountDown extends Component {
   constructor(props) {
-    super(props)
+    super(props);
 
     this.state = {
-      countdown: null,
+      countdown: {},
     }
+  }
+
+  componentWillMount() {
+    this.timeKeys = getTimeKeysWithout(this.props.excludeTimeKeys);
+    this.differ = getDiffer(this.timeKeys);
   }
 
   componentDidMount() {
     this.tick();
+    this.timer = window.setInterval(this.tick.bind(this), 1000);
+  }
 
-    this. timer = window.setInterval(this.tick.bind(this), 1000);
+  componentWillReceiveProps(nextProps) {
+    this.timeKeys = getTimeKeysWithout(nextProps.excludeTimeKeys);
+    this.differ = getDiffer(this.timeKeys);
   }
 
   componentWillUnmount() {
     window.clearInterval(this.timer);
   }
 
-  tick = () => {
-    const countdown = formatDate(new Date(), this.props.toDate, this.props.formatMask);
+  tick() {
+    const countdown = this.differ(moment(), moment(this.props.toDate));
 
-    if (countdown === '00:00:00') {
+    if (countdown.complete) {
       window.clearInterval(this.timer);
-
-      if (this.props.onCountdownEnd) {
-        this.props.onCountdownEnd();
-      }
+      this.props.onCountdownEnd();
     }
 
     this.setState({
       countdown,
     });
 
-    if (this.props.onTick) {
-      this.props.onTick(countdown);
-    }
+    this.props.onTick(countdown);
   }
 
   render() {
+    const {
+      classPrefix
+    } = this.props;
+    const {
+      countdown
+    } = this.state;
+
+    const times = this.timeKeys.map(key => (
+      <span key={key} className={`${classPrefix}countdown-block`}>
+        <span className={`${classPrefix}countdown-value`}>
+          {countdown[key]}
+        </span>
+        <span className={`${classPrefix}countdown-label`}>
+          {key}
+        </span>
+      </span>
+    ));
+
     return(
-      <span>{ this.state.countdown }</span>
+      <span className={`${this.props.classPrefix}countdown`}>{ times }</span>
     );
   }
-};
+}
 
 ReactMomentCountDown.propTypes = {
-  toDate:React.PropTypes.instanceOf(Date).isRequired,
-  formatMask: React.PropTypes.string.isRequired,
+  toDate:React.PropTypes.oneOfType([
+    React.PropTypes.instanceOf(Date),
+    momentPropTypes.momentObj
+  ]).isRequired,
+  excludeTimeKeys: React.PropTypes.array,
   onTick: React.PropTypes.func,
   onCountdownEnd: React.PropTypes.func,
+  classPrefix: React.PropTypes.string
 };
 
 ReactMomentCountDown.defaultProps = {
-  formatMask: 'HH:mm:ss',
-  onTick: null,
-  onCountdownEnd: null,
+  excludeTimeKeys: ['weeks', 'ms'],
+  onTick: () => {},
+  onCountdownEnd: () => {},
+  classPrefix: ''
 };
 
 export default ReactMomentCountDown;
