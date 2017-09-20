@@ -105,7 +105,7 @@ var ReactMomentCountDown = function (_Component) {
           _react2.default.createElement(
             'span',
             { className: classPrefix + 'countdown-label' },
-            key
+            countdown[key] === 1 ? _calculateDateDiff.keyLabels[key].singular : _calculateDateDiff.keyLabels[key].plural
           ),
           index < keysLength - 1 && _react2.default.createElement(
             'span',

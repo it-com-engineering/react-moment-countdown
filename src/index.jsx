@@ -63,7 +63,7 @@ class ReactMomentCountDown extends Component {
           {countdown[key]}
         </span>{' '}
         <span className={`${classPrefix}countdown-label`}>
-          {(countdown[key] === 1 ? keyLabels[key].singular : keyLabels[key].plural}
+          {(countdown[key] === 1) ? keyLabels[key].singular : keyLabels[key].plural}
         </span>
         {index < keysLength - 1 && (
           <span className={`${classPrefix}countdown-delimiter`}>{ delimiter }</span>

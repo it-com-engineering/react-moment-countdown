@@ -7,7 +7,7 @@ export const allKeys = [
   'ms'
 ];
 
-export keyLabels = {
+export const keyLabels = {
 	weeks: {
 		singular: 'week',
 		plural: 'weeks'
