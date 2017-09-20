@@ -6,6 +6,34 @@ export const allKeys = [
   'sec',
   'ms'
 ];
+
+export keyLabels = {
+	weeks: {
+		singular: 'week',
+		plural: 'weeks'
+	},
+	days: {
+		singular: 'day',
+		plural: 'days'
+	},
+	hrs: {
+		singular: 'hr',
+		plural: 'hrs'
+	},
+	min: {
+		singular: 'min',
+		plural: 'min'
+	},
+	sec: {
+		singular: 'sec',
+		plural: 'sec'
+	},
+	ms: {
+		singular: 'ms',
+		plural: 'ms'
+	}
+};
+
 export const conversions = {
   ms: 1,
   sec: 1000,
@@ -23,7 +51,7 @@ export default function calculateDateDiff(fromMoment, toMoment, keys = allKeys) 
     remaining[key] = Math.floor(delta / conversions[key]);
     delta -= remaining[key] * conversions[key];
   });
-  remaining.complete = totalDelta === 0;
+  remaining.complete = totalDelta <= 0;
   return remaining;
 }
 

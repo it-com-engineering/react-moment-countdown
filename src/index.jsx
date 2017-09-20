@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import moment from 'moment';
 import momentPropTypes from 'react-moment-proptypes';
-import { getDiffer, getTimeKeysWithout } from './calculate-date-diff';
+import { getDiffer, getTimeKeysWithout, keyLabels } from './calculate-date-diff';
 
 class ReactMomentCountDown extends Component {
   constructor(props) {
@@ -63,7 +63,7 @@ class ReactMomentCountDown extends Component {
           {countdown[key]}
         </span>{' '}
         <span className={`${classPrefix}countdown-label`}>
-          {key}
+          {(countdown[key] === 1 ? keyLabels[key].singular : keyLabels[key].plural}
         </span>
         {index < keysLength - 1 && (
           <span className={`${classPrefix}countdown-delimiter`}>{ delimiter }</span>
